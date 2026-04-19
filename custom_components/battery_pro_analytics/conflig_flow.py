@@ -3,6 +3,9 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_HOST
 from .const import DOMAIN
 
+from homeassistant import config_entries
+from .const import DOMAIN
+
 class RctBatteryAnalyticsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handhabt den Konfigurations-Flow für RCT Advanced Battery Analytics."""
 
