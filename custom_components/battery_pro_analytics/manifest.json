@@ -8,5 +8,5 @@
   "config_flow": true,
   "iot_standard": "local_polling",
   "version": "0.0.1",
-  "requirements": ["python-rctclient==0.0.1"]
+  "requirements": []
 }
