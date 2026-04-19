@@ -1,0 +1,15 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure RCT Battery Analytics",
+        "data": {
+          "host": "Inverter IP Address"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to inverter"
+    }
+  }
+}
