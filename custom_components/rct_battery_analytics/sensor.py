@@ -1,5 +1,6 @@
 from homeassistant.components.sensor import SensorEntity, SensorStateClass, SensorDeviceClass
-from . import DOMAIN
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from .const import DOMAIN
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]
@@ -12,8 +13,12 @@ async def async_setup_entry(hass, entry, async_add_entities):
     ]
     async_add_entities(sensors)
 
-class RctBatterySensor(SensorEntity):
+# WICHTIG: Hier muss CoordinatorEntity als erstes stehen
+class RctBatterySensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator, entry_id, data_key, name, unit, enabled_default=True):
+        """Pass den Coordinator an die Basis-Klasse weiter."""
+        super().__init__(coordinator)
+        
         self.coordinator = coordinator
         self._data_key = data_key
         self._attr_name = f"RCT Battery {name}"
@@ -28,7 +33,19 @@ class RctBatterySensor(SensorEntity):
             self._attr_device_class = SensorDeviceClass.VOLTAGE
 
     @property
+    def device_info(self):
+        """Ordnet den Sensor einem Gerät zu (für die schöne Qnap-Style Übersicht)."""
+        return {
+            "identifiers": {(DOMAIN, self.coordinator.config_entry.entry_id)},
+            "name": "RCT Power Storage Analytics",
+            "manufacturer": "RCT Power",
+            "model": "Power Storage Pro",
+            "sw_version": "1.0.0",
+        }
+
+    @property
     def native_value(self):
+        """Holt den Wert direkt aus dem Speicher des Coordinators."""
         if self.coordinator.data is None:
             return None
             
@@ -36,6 +53,7 @@ class RctBatterySensor(SensorEntity):
         if value is None:
             return None
 
+        # Umrechnungen & Rundungen
         if self._data_key in ["soc", "soh"]:
             return round(value * 100, 1)
         if self._data_key == "ah_capacity":
@@ -45,10 +63,4 @@ class RctBatterySensor(SensorEntity):
 
         return value
 
-    @property
-    def should_poll(self):
-        return False
-
-    @property
-    def available(self):
-        return self.coordinator.last_update_success
+    # Hinweis: available und should_poll werden automatisch von CoordinatorEntity geregelt
