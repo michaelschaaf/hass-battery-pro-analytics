@@ -1,12 +1,12 @@
 {
-  "domain": "battery_pro_analytics",
-  "name": "Advanced Battery Analytics",
+  "domain": "rct_battery_analytics",
+  "name": "RCT Power Battery Analytics",
   "documentation": "https://github.com/michaelschaaf/hass-battery-pro-analytics",
   "issue_tracker": "https://github.com/michaelschaaf/hass-battery-pro-analytics/issues",
   "dependencies": [],
   "codeowners": ["@michaelschaaf"],
   "config_flow": true,
   "iot_standard": "local_polling",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "requirements": []
 }
