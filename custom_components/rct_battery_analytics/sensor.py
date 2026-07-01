@@ -9,6 +9,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         RctBatterySensor(coordinator, entry.entry_id, "ah_capacity", "Measured Capacity", "Ah"),
         RctBatterySensor(coordinator, entry.entry_id, "cell_drift", "Cell Voltage Drift", "V"),
         RctBatterySensor(coordinator, entry.entry_id, "soc", "Battery SOC", "%"),
+        RctBatterySensor(coordinator, entry.entry_id, "soc_target", "Battery SOC Target", "%"),
         RctBatterySensor(coordinator, entry.entry_id, "soh", "Official Battery SOH", "%", enabled_default=False)
     ]
     async_add_entities(sensors)
@@ -27,7 +28,7 @@ class RctBatterySensor(CoordinatorEntity, SensorEntity):
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_entity_registry_enabled_default = enabled_default
         
-        if data_key in ["soc", "soh"]:
+        if data_key in ["soc", "soc_target", "soh"]:
             self._attr_device_class = SensorDeviceClass.BATTERY
         elif data_key == "cell_drift":
             self._attr_device_class = SensorDeviceClass.VOLTAGE
@@ -54,7 +55,7 @@ class RctBatterySensor(CoordinatorEntity, SensorEntity):
             return None
 
         # Umrechnungen & Rundungen
-        if self._data_key in ["soc", "soh"]:
+        if self._data_key in ["soc", "soc_target", "soh"]:
             return round(value * 100, 1)
         if self._data_key == "ah_capacity":
             return round(value, 2)
