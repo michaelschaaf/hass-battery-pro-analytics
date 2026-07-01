@@ -73,6 +73,7 @@ class RctDataFetcher:
 
     async def fetch_all_data(self):
         soc = await self.read_value("battery.soc")
+        soc_target = await self.read_value("battery.soc_target")
         ah = await self.read_value("battery.ah_capacity")
         min_v = await self.read_value("battery.min_cell_voltage")
         max_v = await self.read_value("battery.max_cell_voltage")
@@ -82,6 +83,7 @@ class RctDataFetcher:
 
         return {
             "soc": soc,
+            "soc_target": soc_target,
             "ah_capacity": ah,
             "min_cell_v": min_v,
             "max_cell_v": max_v,
